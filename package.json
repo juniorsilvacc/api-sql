@@ -1,0 +1,23 @@
+{
+  "name": "api-sql",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juniorsilvacc/api-sql.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/juniorsilvacc/api-sql/issues"
+  },
+  "homepage": "https://github.com/juniorsilvacc/api-sql#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
