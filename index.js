@@ -11,19 +11,26 @@ const server = http.createServer((request, response) => {
   // DELETE - Remover
 
   const METHOD = request.method;
+  const URL = request.url;
 
-  if (METHOD === "POST") {
-    request.on("data", (data) => {
-      const body = JSON.parse(data);
-      const user = {
-        id: randomUUID(),
-        ...body,
-      };
+  if (URL === "/users") {
+    if (METHOD === "POST") {
+      request.on("data", (data) => {
+        const body = JSON.parse(data);
+        const user = {
+          id: randomUUID(),
+          ...body,
+        };
 
-      users.push(user);
+        users.push(user);
 
-      return response.end(JSON.stringify(user));
-    });
+        return response.end(JSON.stringify(user));
+      });
+    }
+
+    if (METHOD === "GET") {
+      return response.end(JSON.stringify(users));
+    }
   }
 });
 
