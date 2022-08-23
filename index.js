@@ -37,6 +37,14 @@ const server = http.createServer((request, response) => {
           // Indetificar qual id do usuário quero alterar
           const userIndex = users.findIndex((user) => user.id === id);
 
+          if (userIndex <= -1) {
+            return response.end(
+              JSON.stringify({
+                message: "Usuário não encontrado",
+              })
+            );
+          }
+
           // Alterar o usuário (ID permanece)
           users[userIndex] = {
             id,
@@ -57,4 +65,8 @@ const server = http.createServer((request, response) => {
 
 server.listen(3333, () => {
   console.log("Server listening on");
+});
+
+process.on("uncaughtException", (err) => {
+  console.log(`Error no servidor ${err}`);
 });
