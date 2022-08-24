@@ -1,51 +1,23 @@
 const http = require("http");
-const user = require("./user");
+const { UserController } = require("./controllers/user.controller");
 
-let users = [];
+const userController = new UserController();
 
-const server = http.createServer((request, response) => {
+const server = http.createServer(async (request, response) => {
   const METHOD = request.method;
   const URL = request.url;
 
   if (URL.startsWith("/users")) {
     if (METHOD === "POST") {
-      request.on("data", async (data) => {
-        const body = JSON.parse(data);
-        const result = await user.create(body);
-        return response.end(JSON.stringify(result));
-      });
+      return userController.post(request, response);
     }
 
     if (METHOD === "GET") {
-      const result = user.findAll();
-      return response.end(JSON.stringify(result));
+      return userController.get(request, response);
     }
 
     if (METHOD === "PUT") {
-      const paramsSprit = URL.split("/");
-      const id = paramsSprit[2];
-
-      // Receber as informações que quero alterar do body
-      request.on("data", async (data) => {
-        const body = JSON.parse(data);
-
-        try {
-          await user.update(body, id);
-
-          return response.end(
-            JSON.stringify({
-              message: "Usuário alterado com sucesso",
-            })
-          );
-        } catch (err) {
-          console.log("error", err);
-          return response.end(
-            JSON.stringify({
-              message: err.message,
-            })
-          );
-        }
-      });
+      return userController.put(request, response);
     }
   }
 });
