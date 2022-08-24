@@ -1,14 +1,12 @@
 const user = require("../user");
 
 class UserController {
-  post(request, response) {
-    request.on("data", async (data) => {
-      const body = JSON.parse(data);
+  async post(request, response) {
+    const { body } = request;
 
-      const result = await user.create(body);
+    const result = await user.create(body);
 
-      return response.end(JSON.stringify(result));
-    });
+    return response.end(JSON.stringify(result));
   }
 
   async get(request, response) {
@@ -17,29 +15,27 @@ class UserController {
     return response.end(JSON.stringify(result));
   }
 
-  put(request, response) {
+  async put(request, response) {
     const { id } = request.params;
 
-    request.on("data", async (data) => {
-      const body = JSON.parse(data);
+    const { body } = request;
 
-      try {
-        await user.update(body, id);
+    try {
+      await user.update(body, id);
 
-        return response.end(
-          JSON.stringify({
-            message: "Usuário alterado com sucesso",
-          })
-        );
-      } catch (err) {
-        console.log("error", err);
-        return response.end(
-          JSON.stringify({
-            message: err.message,
-          })
-        );
-      }
-    });
+      return response.end(
+        JSON.stringify({
+          message: "Usuário alterado com sucesso",
+        })
+      );
+    } catch (err) {
+      console.log("error", err);
+      return response.end(
+        JSON.stringify({
+          message: err.message,
+        })
+      );
+    }
   }
 }
 

@@ -35,8 +35,16 @@ const handler = (request, response) => {
     }
   });
 
-  request.params = objParams;
-  return executeRouter.controller(request, response);
+  request
+    .on("data", async (data) => {
+      const body = JSON.parse(data);
+
+      request.body = body;
+    })
+    .on("end", () => {
+      request.params = objParams;
+      return executeRouter.controller(request, response);
+    });
 };
 
 module.exports = handler;
