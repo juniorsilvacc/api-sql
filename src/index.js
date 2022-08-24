@@ -1,20 +1,5 @@
 const http = require("http");
-const { randomUUID } = require("crypto");
-const { Client } = require("pg");
-
-const client = new Client({
-  host: "localhost",
-  user: "postgres",
-  password: "postgres",
-  database: "api_sql",
-  port: 5432,
-});
-
-client.connect();
-client.query("SELECT NOW(),", (err, res) => {
-  console.log("Sucess");
-  client.end();
-});
+const user = require("./user");
 
 let users = [];
 
@@ -24,21 +9,16 @@ const server = http.createServer((request, response) => {
 
   if (URL.startsWith("/users")) {
     if (METHOD === "POST") {
-      request.on("data", (data) => {
+      request.on("data", async (data) => {
         const body = JSON.parse(data);
-        const user = {
-          id: randomUUID(),
-          ...body,
-        };
-
-        users.push(user);
-
-        return response.end(JSON.stringify(user));
+        const result = await user.create(body);
+        return response.end(JSON.stringify(result));
       });
     }
 
     if (METHOD === "GET") {
-      return response.end(JSON.stringify(users));
+      const result = user.findAll();
+      return response.end(JSON.stringify(result));
     }
 
     if (METHOD === "PUT") {
@@ -50,22 +30,16 @@ const server = http.createServer((request, response) => {
         .on("data", (data) => {
           const body = JSON.parse(data);
 
-          // Indetificar qual id do usuário quero alterar
-          const userIndex = users.findIndex((user) => user.id === id);
-
-          if (userIndex <= -1) {
+          try {
+            user.update(body, id);
+          } catch (err) {
+            console.log("error", er);
             return response.end(
               JSON.stringify({
-                message: "Usuário não encontrado",
+                message: err.message,
               })
             );
           }
-
-          // Alterar o usuário (ID permanece)
-          users[userIndex] = {
-            id,
-            ...body,
-          };
         })
         .on("end", () => {
           // Retornar usuário alterado
