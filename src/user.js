@@ -13,23 +13,18 @@ class User {
     return user;
   }
 
-  findAll() {
-    return this.users;
+  async findAll() {
+    return this.userRepository.findAll();
   }
 
-  update(body, id) {
-    // Indetificar qual id do usuário quero alterar
-    const userIndex = this.users.findIndex((user) => user.id === id);
+  async update(body, id) {
+    const userExists = await this.userRepository.findById(id);
 
-    if (userIndex <= -1) {
+    if (!userExists) {
       throw new Error("Usuário não encontrado");
     }
 
-    // Alterar o usuário (ID permanece)
-    this.users[userIndex] = {
-      id,
-      ...body,
-    };
+    await this.userRepository.update(body, id);
   }
 }
 

@@ -26,29 +26,26 @@ const server = http.createServer((request, response) => {
       const id = paramsSprit[2];
 
       // Receber as informações que quero alterar do body
-      request
-        .on("data", (data) => {
-          const body = JSON.parse(data);
+      request.on("data", async (data) => {
+        const body = JSON.parse(data);
 
-          try {
-            user.update(body, id);
-          } catch (err) {
-            console.log("error", er);
-            return response.end(
-              JSON.stringify({
-                message: err.message,
-              })
-            );
-          }
-        })
-        .on("end", () => {
-          // Retornar usuário alterado
+        try {
+          await user.update(body, id);
+
           return response.end(
             JSON.stringify({
               message: "Usuário alterado com sucesso",
             })
           );
-        });
+        } catch (err) {
+          console.log("error", err);
+          return response.end(
+            JSON.stringify({
+              message: err.message,
+            })
+          );
+        }
+      });
     }
   }
 });
