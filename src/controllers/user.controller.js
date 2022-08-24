@@ -18,10 +18,7 @@ class UserController {
   }
 
   put(request, response) {
-    const URL = request.url;
-
-    const paramsSprit = URL.split("/");
-    const id = paramsSprit[2];
+    const { id } = request.params;
 
     request.on("data", async (data) => {
       const body = JSON.parse(data);
