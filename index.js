@@ -1,7 +1,23 @@
 const http = require("http");
 const { randomUUID } = require("crypto");
+const { Client } = require("pg");
+
+const client = new Client({
+  host: "localhost",
+  user: "postgres",
+  password: "postgres",
+  database: "api_sql",
+  port: 5432,
+});
+
+client.connect();
+client.query("SELECT NOW(),", (err, res) => {
+  console.log("Sucess");
+  client.end();
+});
 
 let users = [];
+
 const server = http.createServer((request, response) => {
   const METHOD = request.method;
   const URL = request.url;

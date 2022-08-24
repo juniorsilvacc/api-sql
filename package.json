@@ -19,5 +19,8 @@
   "homepage": "https://github.com/juniorsilvacc/api-sql#readme",
   "devDependencies": {
     "nodemon": "^2.0.19"
+  },
+  "dependencies": {
+    "pg": "^8.8.0"
   }
 }
