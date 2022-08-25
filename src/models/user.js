@@ -1,5 +1,5 @@
 const { randomUUID } = require("crypto");
-const UserRepository = require("./user.repository");
+const UserRepository = require("../repositories/user-repository");
 
 class User {
   constructor() {

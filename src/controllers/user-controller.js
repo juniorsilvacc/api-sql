@@ -1,4 +1,4 @@
-const user = require("../user");
+const user = require("../models/user");
 
 class UserController {
   async post(request, response) {
